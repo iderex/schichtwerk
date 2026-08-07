@@ -15,6 +15,12 @@ The rung is a property of the model configuration and not of the code. The
 solver assembles one coupled system, and a lower rung is that system with
 species and reaction terms absent from it.
 
+Absent rather than zeroed. A term left in place with a zero coefficient still
+costs the solve, still lets a field nobody is updating reach a convergence
+criterion, and leaves a partly coupled state that reads as the lower rung
+without being it. Absence is a state something can be asked about. A zero is a
+number that has to be trusted.
+
 Two rungs are reached in milestone 4. Concentration dependent diffusivity
 through charge states is the first thing that works end to end. Pair diffusion
 with the self interstitial and the vacancy solved as their own species is the
