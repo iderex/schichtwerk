@@ -7,6 +7,10 @@ Decided by issue #10, milestone 1.
 In force from the commit that lands this file. It supersedes nothing, because
 it is the first record of its kind here.
 
+Amended once since, in one field. The host name is no longer recorded by
+default, and the section on the host name and the user name is the amendment and
+says what it replaced.
+
 The naming and numbering of decision records is fixed by issue #2, which is not
 decided. This filename is therefore provisional and #2 may change it. Nothing
 in the content below depends on the name.
@@ -76,11 +80,61 @@ record or a later one names? If yes, it is not recorded, and the route is named
 where the derived thing would have gone. Recording both a thing and its
 derivation creates two places that can disagree.
 
-Does it belong to the run rather than to the answer? Wall clock time, the host
-name and the amount of memory used change nothing about the numbers. They are
-recorded, and they are recorded in a part of the manifest that says on its face
-that nothing in it affects the answer, so that a reader comparing two manifests
-knows which differences matter.
+Does it belong to the run rather than to the answer? Wall clock time and the
+amount of memory used change nothing about the numbers. They are recorded, and
+they are recorded in a part of the manifest that says on its face that nothing
+in it affects the answer, so that a reader comparing two manifests knows which
+differences matter.
+
+There is a fourth question and it was missing. Could this field identify a
+person? A field can affect nothing and still name somebody, and the three
+questions above sort fields on an axis that cannot see that. The host name is
+the field where the two axes disagree, and the section below is where it is
+settled.
+
+## The host name and the user name
+
+The host name is recorded only when the operator switches it on. The user name
+is the same, and it was never in the list above because nothing had proposed it.
+Neither is recorded by default, and the switch that records them is documented
+beside the statement of the data protection position rather than in a reference
+appendix, because a control nobody finds is a control that is not there.
+
+Wall clock time and the amount of memory used are unaffected by this and stay
+exactly where the paragraph above puts them. They do not name anybody.
+
+Absolute paths are not recorded either. A path is recorded relative to a stated
+root, and the root is named in the manifest as a root rather than expanded.
+That keeps a result set portable as well as clean, which is a second reason for
+the same rule.
+
+The reason is what a result document is for. It is a thing people attach to
+issues, papers and emails, and a default that is safe on the machine that wrote
+it and unsafe the moment it is sent is the wrong default for an artefact whose
+purpose is to be sent. Recording a host name costs the reader nothing they
+cannot ask for, and in an organisation a host name is frequently a person's name
+or their asset number.
+
+This paragraph is an amendment. The text it replaced put the host name in the
+part of the manifest that carries what belongs to the run rather than to the
+answer, and it was right that it belongs there and wrong that it is recorded by
+default. The record for issue #15 found the disagreement, wrote it out rather
+than smoothing it over, and left the repair here, because a record amended from
+outside is a record whose own text no longer says what it decided. The reasoning
+is in that record and is not restated here:
+
+    git grep -n 'the conflict with the record for issue #10' \
+      -- docs/decisions/0015-the-data-protection-position.md
+
+Nothing refuses a manifest that records a host name anyway. There is no manifest
+writer and nothing that could read one:
+
+    git ls-files -- '*.c' '*.h' '*.cpp' '*.hpp' '*.rs' 'CMakeLists.txt' | wc -l
+    0
+
+So this is a constraint on the writer that issue #10 owes rather than a
+property of anything running, in the same sense as the check this record already
+owes further down.
 
 ## What the manifest holds under that rule
 
