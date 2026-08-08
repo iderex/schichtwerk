@@ -6,6 +6,13 @@ Derived on 2026-08-08 against `5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3`. Every
 count below carries the command that produced it, so the document is re-derived
 rather than trusted.
 
+Amended against `4b06a776b6ad710c75824b9cd259e03d4e4f7d95`, which is the first
+commit carrying a document written after these rules existed. The rules held on
+that document. What the re-run found is in the region they decline to read, and
+it narrows one of them. The section on records in another tree carries it, and
+the counts under "The measurement" are the ones the earlier commit produced and
+are left as they were.
+
 ## Why the convention comes before the check
 
 Issue #61 asks for a gate leg that refuses documentation naming a path that does
@@ -80,9 +87,15 @@ never resolve here.
 
 **A path in another tree is never written as a candidate.** It goes inside the
 block that carries the command reaching it, which is where a reader wants it
-anyway, or it is named in prose by its bare filename, or it is written as a link
-to it. The two foreign filenames in this tree today are written the second way
-and are the two the rules above decline to check.
+anyway, or it is written as a link to it, or it is named in prose by its bare
+filename with the tree named beside it. The last of those three is the form the
+rules above decline to check, and the requirement to name the tree was added by
+the amendment below rather than being in this rule when it landed.
+
+The tree is named beside the filename and not joined to it. A span reading
+`iderex/bremsweg` is a repository under the rule above and is declined, but the
+same repository joined onto a filename has a separator and a dot in its last
+segment, so it becomes a candidate and can never resolve here.
 
 **An example path goes inside a fenced block.** This is the trap #61 names in
 its own body, and the block rule handles it without a marker of its own.
@@ -156,6 +169,93 @@ a code span is a pair of backticks on one line. It is written down because its
 output is the evidence for the rules above, not because it is the
 implementation.
 
+## Records in another tree, and why a bare filename carries its tree
+
+These rules landed at `03922d9213a108e6f1b37d5bf691a9635bad8534`. One document
+has landed since, it was written after the rules existed, and it is the first
+contact they have had with a document that had them available. Re-running the
+two commands above at `4b06a776b6ad710c75824b9cd259e03d4e4f7d95` gives eighteen
+markdown files, twelve candidates instead of ten, and every one of the twelve
+resolves. Both new candidates are in this file. The rules held.
+
+What the re-run turned up is in the region they decline to read. A bare filename
+in prose is not checked, and when this file landed it said the gap would go live
+the day an in tree file was named that way. It is live now, and a rename has
+nothing to do with it.
+
+The other board this tree depends on numbers its decision records in the same
+scheme this one uses. Ten numbers exist in both trees, carrying different
+subjects in each:
+
+    comm -12 \
+      <(git ls-files docs/decisions/ | sed 's#.*/##' | cut -c1-4 | sort) \
+      <(gh api repos/iderex/bremsweg/contents/docs/decisions --jq '.[].name' \
+        | cut -c1-4 | sort)
+    0003
+    0005
+    0006
+    0007
+    0008
+    0009
+    0010
+    0011
+    0012
+    0013
+
+Two of those ten are named in prose in this tree, by bare filename, and they are
+the other tree's:
+
+    git grep -n '0006-determinism-and-the-random-number-contract.md\|0010-how-uncertainty-travels-to-a-reported-number.md' -- '*.md'
+    docs/decisions/0041-the-implantation-interface.md:171:is `0010-how-uncertainty-travels-to-a-reported-number.md` in the same directory
+    docs/decisions/0041-the-implantation-interface.md:185:record is `0006-determinism-and-the-random-number-contract.md`.
+
+This tree holds a 0006 and a 0010 of its own, about different things:
+
+    git ls-files docs/decisions/ | grep -E '/(0006|0010)-'
+    docs/decisions/0006-discretisation-and-moving-boundaries.md
+    docs/decisions/0010-result-document-and-run-manifest.md
+
+Nothing resolves wrongly today, because the titles differ and the full filenames
+differ with them. The hazard is that neither tree consults the other before
+numbering, so the two sequences are free to converge, and the failure that
+produces is not a red gate. It is a green one over a reference that names a real
+file in the wrong tree, which is worse than the rot this check exists against,
+because the reader arrives somewhere plausible instead of nowhere.
+
+One more shape came out of the same run, and it is why a bare filename cannot be
+resolved by its shape at all. Five spans in prose have no separator and a dot in
+their last segment, and one of them is not a file:
+
+    docs/decisions/0041-the-implantation-interface.md	171	0010-how-uncertainty-travels-to-a-reported-number.md
+    docs/decisions/0041-the-implantation-interface.md	185	0006-determinism-and-the-random-number-contract.md
+    docs/gate-parity.md	65	dotnet.yml
+    docs/gate-parity.md	66	build.yml
+    docs/gate-parity.md	126	.NET
+    docs/gate-parity.md	186	dotnet.yml
+
+Six lines and five distinct spans, at the commit named at the top of this
+section. Once this file lands the command returns a seventh line and the same
+five spans, because the paragraph above quotes one of them.
+
+`.NET` is a platform name and will never be a path. The other four are files in
+two different trees, and nothing in the shape of any of them says which tree, or
+that one of them is not a file.
+
+So the rule this adds is for a reader rather than for a check. Naming the tree
+beside the filename costs three words and removes the case where a reference
+lands on the wrong document. It is not enforceable and it is not claimed to be.
+
+The two references above are brought into conformance in the same change that
+adds the rule, because a rule the tree breaks on the day it lands is a rule
+nobody will follow. The change to each is the tree's name and nothing else, and
+no claim in that record moves. What reads them back once this is on `main` is
+
+    git grep -n 'iderex/bremsweg`' -- docs/decisions/0041-the-implantation-interface.md
+
+with no output pasted beside it, because at the commit this section is written
+against there is none. The count of bare filename spans does not move either,
+since naming the tree beside a filename leaves the filename bare.
+
 ## What this does not do, stated rather than implied
 
 It does not read inside a block. A path pasted in a command or in output can rot
@@ -163,10 +263,12 @@ with the tree and stay green. What catches that is the command beside it, which
 can be run again; nothing mechanical catches it here, and pretending otherwise
 would be worse than saying so.
 
-It does not check a bare filename in prose. Two are declined today and both are
-correct to decline, but an in tree file named that way would escape the same
-rule, and the tree is one rename away from that being a live gap rather than a
-theoretical one.
+It does not check a bare filename in prose. Five spans are declined today and
+all five are correct to decline, but an in tree file named that way would escape
+the same rule. That was written here as a gap a rename would open. The section
+above is why it is open already, on a route a rename has nothing to do with, and
+the convention answers it with a rule a person follows rather than with a
+mechanism.
 
 It does not check an extensionless file, or a directory written without a
 trailing separator. Both are shapes the last rule cannot tell from ordinary

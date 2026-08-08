@@ -168,8 +168,8 @@ That board reports statistical uncertainty per tally in every run, names the
 estimator each tally used, keeps coefficient uncertainty separate from it, and
 declines to put a number on model uncertainty on the grounds that computing one
 would require knowing the answer the approximations are wrong about. The record
-is `0010-how-uncertainty-travels-to-a-reported-number.md` in the same directory
-as the one quoted above.
+is `0010-how-uncertainty-travels-to-a-reported-number.md`, in `iderex/bremsweg`,
+in the same directory as the one quoted above.
 
 Two of those three are more than the third item of the contract asked for. The
 contract asked for the statistical uncertainty and a statement of the model's
@@ -182,7 +182,8 @@ energies shares the coefficient part and does not share the statistical part.
 Random numbers there come from a counter based generator with one stream per
 history, derived from the run seed and the history index, so a history consumes
 the same numbers whatever thread ran it and however many threads there were. The
-record is `0006-determinism-and-the-random-number-contract.md`.
+record is `0006-determinism-and-the-random-number-contract.md`, in
+`iderex/bremsweg`.
 
 The position here is bit reproducibility at a fixed thread count. A per history
 stream does not depend on the thread count at all, so it satisfies the fourth
