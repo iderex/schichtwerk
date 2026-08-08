@@ -35,6 +35,29 @@ What is promised about three dimensions is not settled. The reasoning behind all
 of this, including what each exclusion costs, is in
 [docs/decisions/0003-the-boundary.md](docs/decisions/0003-the-boundary.md).
 
+## What this does with your data
+
+Nothing computed on your machine leaves it. There is no telemetry, no crash
+reporting, no result upload and no shared cache. Nothing is sent anywhere in
+order to run a simulation. Personal data never leaves the host unless you
+deliberately federate, meaning you configure an outward connection yourself,
+knowing what it carries. No default federates.
+
+A result document contains the recipe that produced it, and a recipe is often
+the most closely held thing a manufacturer has, so the defaults are set for a
+document that gets attached to an email. Your user name and your host name are
+not recorded. Paths are recorded relative to a named root rather than as
+absolute paths that contain your home directory. If you want the user name and
+the host name for your own traceability, you switch them on.
+
+You are the controller of anything personal that ends up in your files. This
+project processes nothing on anyone else's behalf.
+
+There is no code here yet, so this is a commitment that binds the work rather
+than a description of a program you can run. The reasoning, and the two places
+where the tree does not yet match it, are in
+[docs/decisions/0015-the-data-protection-position.md](docs/decisions/0015-the-data-protection-position.md).
+
 See [NOTICE.md](NOTICE.md) for the intended-use notice.
 
 To report a security problem privately, see [SECURITY.md](SECURITY.md). A model
