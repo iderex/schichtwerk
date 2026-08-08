@@ -10,10 +10,13 @@ The naming and numbering of decision records is fixed by issue #2, which is not
 decided. This filename is provisional and #2 may change it. Nothing in the
 content below depends on the name.
 
-Two items of issue #15 are not met by this record, and the sections below say
-which and why rather than only this one. One of them is a conflict with a
-sentence in the landed record for issue #10, and it is written out in full
-rather than resolved quietly.
+Three items of issue #15 were not met when this record landed, and the sections
+below say which and why rather than only this one. One of them was a conflict
+with a sentence in the landed record for issue #10, which was written out in
+full rather than resolved quietly, and it has since been repaired in that
+record. Two remain unmet and are named in the sections that own them: the
+statement in user documentation, and the check that a normal run reaches no
+network.
 
 ## Why a process simulator needs one
 
@@ -137,36 +140,39 @@ document is for. It is a thing people attach to issues, papers and emails. A
 default that is safe on the machine that wrote it and unsafe the moment it is
 sent is the wrong default for an artefact whose purpose is to be sent.
 
-The conflict, stated rather than smoothed over. The landed record for issue #10
-says of wall clock time, the host name and the amount of memory used that "they
-are recorded, and they are recorded in a part of the manifest that says on its
-face that nothing in it affects the answer". On the host name that is the
-opposite of the rule above.
+The conflict, stated rather than smoothed over. When this record landed, the
+record for issue #10 said of wall clock time, the host name and the amount of
+memory used that they are recorded in a part of the manifest that says on its
+face that nothing in it affects the answer. On the host name that was the
+opposite of the rule above, and this section was written to say so rather than
+to leave a reader to find both sentences and pick one.
 
-    git grep -n -A3 'Does it belong to the run rather than to the answer' \
+Both records agreed on the reasoning and disagreed on the conclusion. Issue
+#10's sentence separates fields by whether they affect the answer, which is the
+right axis for a manifest and is the wrong axis for this question: a field that
+affects nothing can still identify somebody. Wall clock time and memory used
+were never in dispute and stay exactly as issue #10 has them. The host name was
+the single field.
+
+The amendment is now in that record rather than in this one, for the reason this
+section originally gave: a record amended from outside is a record whose own
+text no longer says what it decided. What it says is quoted from the record
+itself rather than from this description of it:
+
+    git grep -n -A2 '^The host name is recorded only when' \
       -- docs/decisions/0010-result-document-and-run-manifest.md
-    docs/decisions/0010-result-document-and-run-manifest.md:79:Does it belong to the run rather than to the answer? Wall clock time, the host
-    docs/decisions/0010-result-document-and-run-manifest.md-80-name and the amount of memory used change nothing about the numbers. They are
-    docs/decisions/0010-result-document-and-run-manifest.md-81-recorded, and they are recorded in a part of the manifest that says on its face
-    docs/decisions/0010-result-document-and-run-manifest.md-82-that nothing in it affects the answer, so that a reader comparing two manifests
+    docs/decisions/0010-result-document-and-run-manifest.md:97:The host name is recorded only when the operator switches it on. The user name
+    docs/decisions/0010-result-document-and-run-manifest.md-98-is the same, and it was never in the list above because nothing had proposed it.
+    docs/decisions/0010-result-document-and-run-manifest.md-99-Neither is recorded by default, and the switch that records them is documented
 
-Both records agree on the reasoning and disagree on the conclusion. Issue #10's
-sentence separates fields by whether they affect the answer, which is the right
-axis for a manifest and is the wrong axis for this question: a field that affects
-nothing can still identify somebody. Wall clock time and memory used are
-unaffected by this record and stay exactly as issue #10 has them. The host name
-is the single field in dispute.
+So the two records no longer disagree, and that is a statement about two
+documents and about nothing else. There is no manifest writer, so no default has
+been changed in anything that runs, and the section above on what this position
+is today says what a commitment binding work that has not started is worth.
 
-This record does not edit that one. An amendment to the record for issue #10 is
-owed, saying that the host name is recorded only when switched on, and it belongs
-with that record rather than being made from this one, because a record amended
-from outside is a record whose own text no longer says what it decided. Issue #15
-stays open on that item, since its own done-when asks for the manifest defaults in
-issue #10 to match this position and today they do not.
-
-Until that amendment lands, the two records disagree in the tree and a reader
-finding only one of them gets a different answer depending on which. Saying so is
-what this section is for.
+Issue #15 no longer stays open on this item. It stays open on the other two,
+which are the statement in user documentation that does not exist yet and the
+check that nothing exists to run.
 
 ## The controller
 
