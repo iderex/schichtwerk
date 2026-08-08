@@ -7,3 +7,7 @@ the architecture is written down there with its reasons before the code
 that depends on it exists.
 
 See [NOTICE.md](NOTICE.md) for the intended-use notice.
+
+To report a security problem privately, see [SECURITY.md](SECURITY.md). A model
+that disagrees with a measurement is a correctness problem rather than a security
+one, and it belongs on the issue tracker in the open.
