@@ -13,10 +13,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # No `name:` on this job: the "Protect main" ruleset's required status check
-  # matches the literal check-run name, which defaults to the job id
-  # ("dependency-review") when no `name:` is set. Overriding it here would
-  # rename the check run and silently break the required-status-check gate.
+  # No `name:` on this job: a required status check is matched by the literal
+  # check-run name, which defaults to the job id ("dependency-review") when no
+  # `name:` is set. Setting one here renames the check run, and a rule naming
+  # the old name then matches nothing while staying green.
+  #
+  # Nothing requires this check yet. The ruleset on this repository is `gate`,
+  # and it carries no required status checks:
+  #
+  #   gh api repos/iderex/schichtwerk/rulesets --jq '.[] | "\(.id) \(.name)"'
+  #   20522959 gate
+  #   gh api repos/iderex/schichtwerk/rulesets/20522959 \
+  #     --jq '[.rules[]|select(.type=="required_status_checks")|.parameters.required_status_checks[].context]'
+  #   []
+  #
+  # Derived 2026-08-09. That is a reason to fix the name before a requirement
+  # exists rather than after it. Issue #18 is where the requirement is prepared.
   dependency-review:
     runs-on: ubuntu-latest
     timeout-minutes: 10
