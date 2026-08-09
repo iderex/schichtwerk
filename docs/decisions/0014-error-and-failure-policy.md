@@ -38,6 +38,15 @@ It is replaced by the command alone, and the section says what was wrong with
 the paste and why refreshing it would not be the repair. No placement, class,
 status or tolerance in this record is touched by that.
 
+Amended a third time on 2026-08-09 against
+`65759e1f1df62f6910bbfa105b9f40860154b214`. Two implant cases were placed
+outside this record and one of them was placed twice, in two records that do not
+agree, while the record holding the classes said nothing about either. The
+sections headed "An implant step that names no method" and "An implant above the
+amorphisation threshold" are what the amendment added, and both argue from the
+ordered rule rather than asserting a class. Nothing else this record decided has
+moved.
+
 ## Why this is decided before the first solver exists
 
 A long simulation that hits a problem has three honest options and one dishonest
@@ -241,6 +250,122 @@ neighbouring material's coefficients, and the reason does not change when the ga
 is one property instead of a whole set. There is nothing to substitute from, so
 there is nothing a disclosure could carry.
 
+## An implant step that names no method
+
+Two routes produce an implant profile on this board. One is the analytic route in
+issue #42, which reads moments from a table indexed by ion, energy and target
+material. The other is a transport calculation reached across the interface the
+record for issue #41 fixes. A recipe whose implant step names neither leaves the
+run to choose between them, and the third item of issue #42's Done-when asks for
+that recipe to be refused. This record was silent, so the class sat in a Done-when
+and nowhere a reader looking for a failure class would open.
+
+It is a refusal.
+
+The case is one noun away from a case the record for issue #8 places the other
+way, which is why it needs the argument rather than a cross reference:
+
+    git grep -n 'A recipe that names no rung is a substituted default' -- docs/decisions/
+    docs/decisions/0008-diffusion-model-family.md:100:A recipe that names no rung is a substituted default in the sense of issue #14.
+
+The rungs that record covers are one model family, and a lower rung is the higher
+one with terms absent rather than a different model of the same quantity. That
+record puts the point defect rung under an obligation to reproduce the charge
+state answer where the two meet:
+
+    git grep -n 'Issue #34 carries that obligation' -- docs/decisions/
+    docs/decisions/0008-diffusion-model-family.md:67:Issue #34 carries that obligation.
+
+So a run that took the default there produced a number the rung a user would have
+named reproduces in a stated limit. That is what makes the default defensible,
+which is the condition the substitution class in this record puts before anything
+is recorded, and the manifest entry then names something a reader can reason about
+without running the other rung.
+
+The two implant routes stand in no such relation. Neither is the other with terms
+switched off, and the record for issue #41 finds the accuracy ordering between
+them inverted for an implant into a single crystal, then declines to say which
+route serves that case:
+
+    git grep -n 'the cheaper path is the one that can express' -- docs/decisions/
+    docs/decisions/0041-the-implantation-interface.md:215:evidence the cheaper path is the one that can express the observable and the
+
+    git grep -n 'Which route serves an implant into a crystalline target' -- docs/decisions/
+    docs/decisions/0041-the-implantation-interface.md:313:Which route serves an implant into a crystalline target. Issue #42 is the
+
+A default therefore fails in a different direction depending on a property of the
+case the run was not told to weigh. Into a single crystal, the route that cannot
+express a channelling tail returns a profile that is too shallow and missing the
+feature a junction depth is read off. Through a layer stack, the analytic route
+approximates what the transport calculation does not, which is the limitation the
+sixth item of issue #42's Done-when has to state plainly. While both hold, no
+default is defensible, the second question of the rule above does not carry the
+case, and the first question and the tie send it the same way.
+
+The refusal names the ion, the energy, the target and both route names. A message
+saying only that a method is missing leaves the user to assume the two would have
+agreed, which is the assumption this placement exists against.
+
+The condition that moves it is observable rather than a date. If the question the
+record for issue #41 leaves open is settled, so that one route is authoritative
+for a named target class, a defensible default exists for that class and the
+placement becomes a recorded substitution there, by an amendment to this record.
+It does not move for a class the settlement does not name.
+
+## An implant above the amorphisation threshold
+
+It is a refusal, and it is written here rather than in a Done-when and one other
+record.
+
+Where the case sits in the tree today. The record for issue #41 states the
+behaviour and attributes the class to the rule in this record:
+
+    git grep -n 'Above the amorphisation threshold the tool refuses' -- docs/decisions/
+    docs/decisions/0041-the-implantation-interface.md:238:Above the amorphisation threshold the tool refuses, which is issue #44's own
+
+The record for issue #8 describes the same case as a run that continues, and the
+record above quotes that sentence in a section about the dose regime without
+reading it against its own:
+
+    git grep -n 'an implant heavy enough to amorphise' -- docs/decisions/
+    docs/decisions/0008-diffusion-model-family.md:125:the model, so an implant heavy enough to amorphise is annealed as though the
+    docs/decisions/0041-the-implantation-interface.md:159:    docs/decisions/0008-diffusion-model-family.md-125:the model, so an implant heavy enough to amorphise is annealed as though the
+
+Two landed records disagreeing about a class, with the record that holds the
+classes silent, is the state this section ends.
+
+The rule decides it at the first question. An anneal computed as though the
+lattice were intact, after an implant that amorphised it, produces a profile that
+is smooth and plausible and is about a different problem, and nothing in the
+result marks the case. The record for issue #8 refuses a neighbouring case for
+that reason in its own words:
+
+    git grep -n 'because a silently substituted material is a wrong' -- docs/decisions/
+    docs/decisions/0008-diffusion-model-family.md:137:material's coefficients, because a silently substituted material is a wrong
+
+A lattice the model cannot represent and a material the parameter set does not
+hold are the same sentence with different nouns, and the third item of issue
+#44's Done-when already asks for the refusal.
+
+The refusal names the ion, the dose, the threshold that was exceeded and the
+entry the threshold came from. A threshold quoted without its source is a number
+a user cannot argue with, and this is a case where a user with a reason to
+disagree is the one the message is for.
+
+What this does not decide. The model still has no amorphous phase and no regrowth
+path. That is the record for issue #8's scope statement and nothing here moves
+it. What moves is what a run does when it is asked anyway, which is stop rather
+than anneal as though the lattice were intact. The sentence in that record
+describing the run as continuing is where a reader meets the two statements, and
+changing it is an amendment to that record and belongs to issue #8.
+
+The threshold is a number rather than a class, so it is not fixed here. It is a
+per material quantity carrying provenance under the record for issue #11, in the
+table issue #28 builds, and a run that cannot obtain one for the target material
+has no threshold to compare a dose against. That case is already placed in the
+section above: a property absent for a material whose parameter set otherwise
+exists is a refusal naming the material and the property.
+
 ## Not a number and infinity
 
 They are refusals, not values to be propagated.
@@ -442,6 +567,13 @@ checks as well, so a run may extend a fit and record nothing and stay green. And
 nothing compares the stop a run made against the status list above, so a reader
 who wants to know which one a bad recipe returns has this record and no verdict
 from a machine.
+
+The two implant placements are in that position and one step further out. There
+is no implant step for a method field to be absent from and no dose for a
+threshold to be compared against, so nothing could refuse either even if
+something read them. Both are also placed against records rather than against
+code, so what stands behind them until an implant step exists is a reader who
+opens this file.
 
 ## The means
 
