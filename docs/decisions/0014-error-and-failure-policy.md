@@ -205,8 +205,8 @@ can close, and nothing anywhere reads unknown as unbounded.
 The neighbouring case that is a refusal. A property absent for a material whose
 parameter set otherwise exists is a refusal, with the message naming the material
 and the property, which is what the fourth item of issue #28's Done-when asks for.
-It is the case already placed further up this record one step finer: a material
-for which no parameter set exists is a refusal rather than a run with a
+The case already placed further up this record is the same one a step coarser: a
+material for which no parameter set exists is a refusal rather than a run with a
 neighbouring material's coefficients, and the reason does not change when the gap
 is one property instead of a whole set. There is nothing to substitute from, so
 there is nothing a disclosure could carry.
@@ -347,8 +347,8 @@ places them here already:
 
 A parameter set that does not parse returns 2, and that term of the original
 sentence was right. A parameter set that parses and lacks a coefficient a recipe
-uses returns 1, which is the material case placed further up this record one step
-finer.
+uses returns 1, which is the material case placed further up this record taken a
+step finer.
 
 The word, since the two records use it differently and neither is wrong. In this
 record a refusal is the class that stops the run and exits 1. In the record for
