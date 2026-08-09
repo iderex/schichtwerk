@@ -2,7 +2,9 @@ name: unicode-guard
 
 on:
   # Every branch and every PR: the guard is a cheap read-only scan and must cover
-  # any future release branch too, not just main (one code line since #954).
+  # any future release branch too, not just main. This repository has one line of
+  # development today, and the trigger is written so that a second one is covered
+  # on the day it exists rather than afterwards.
   push:
     branches: ["**"]
   pull_request:
