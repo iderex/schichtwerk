@@ -30,6 +30,14 @@ are what the amendment added, and the second says what was wrong with the
 sentence it replaces rather than replacing it quietly. Nothing else this record
 decided has moved.
 
+Amended again on 2026-08-09 against `2415de065f2b74710c1842cb9070dab24e1d687b`.
+The section headed "What is already placed by the records that landed" opened
+with a command and a pasted listing of the records in the tree, and the listing
+had been true at the commit that landed this file and was not true afterwards.
+It is replaced by the command alone, and the section says what was wrong with
+the paste and why refreshing it would not be the repair. No placement, class,
+status or tolerance in this record is touched by that.
+
 ## Why this is decided before the first solver exists
 
 A long simulation that hits a problem has three honest options and one dishonest
@@ -104,14 +112,36 @@ done in the pull request that was trying to get a case to pass.
 ## What is already placed by the records that landed
 
 Stated here so that the classes are concrete rather than abstract, and so that a
-reader can check them against the files rather than against this paragraph:
+reader can check them against the files rather than against this paragraph. Each
+placement below names the record it came from, and what the set of records is at
+any moment is what this prints rather than what this document last saw:
 
     git ls-files docs/decisions/
-    docs/decisions/0006-discretisation-and-moving-boundaries.md
-    docs/decisions/0008-diffusion-model-family.md
-    docs/decisions/0010-result-document-and-run-manifest.md
-    docs/decisions/0012-what-validation-means.md
-    docs/decisions/0014-error-and-failure-policy.md
+
+Five lines of output were pasted under that command and they are removed rather
+than refreshed. They were the whole of the directory at
+`ab1dc9c2e7213ee879131a3e5766230c68fadf02`, the commit that landed this record,
+and they were correct there. The same command answers with thirteen names at
+`2415de065f2b74710c1842cb9070dab24e1d687b`, which is `origin/main` as this is
+written:
+
+    git ls-tree -r --name-only ab1dc9c2e7213ee879131a3e5766230c68fadf02 -- docs/decisions/ | wc -l
+    5
+    git ls-tree -r --name-only 2415de065f2b74710c1842cb9070dab24e1d687b -- docs/decisions/ | wc -l
+    13
+
+What the stale paste cost is inside this document rather than beside it. The
+amendment of 2026-08-09 added two sections that argue their placements out of
+`docs/decisions/0011-parameter-provenance.md` and
+`docs/decisions/0009-the-recipe-format.md` and quote both by path, and it left
+the paste alone. Neither name is among the five. So the one paragraph offering a
+reader the set to check the placements against was telling that reader that two
+of the records this document reasons from are not in the tree, and it was doing
+it under a command, which is where somebody goes to settle that exact question.
+
+Pasting thirteen names in place of five puts the same defect back at the next
+landing, because a record arrives here whenever a decision is taken and nothing
+recomputes a paste when one does. The command stays and the snapshot does not.
 
 A field transfer that violates the conservation tolerance is a refusal. The
 record for issue #6 fixes that the run stops and leaves the class to this one,
