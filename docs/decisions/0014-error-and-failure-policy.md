@@ -21,6 +21,15 @@ enforced" is the whole disclosure of what that leaves unrefused.
 The naming and numbering of decision records is fixed by issue #2, which is not
 decided. This filename is provisional and #2 may change it.
 
+Amended on 2026-08-09 against `6b59c79a571beb6120146691da4d417745217aa5`. Two
+landed records hand a placement to this one and it was silent on both, and the
+sentence dividing a refusal from an unreadable input gave one status to three
+stops that are fixed by three different people. The sections headed "A parameter
+used outside the range it was fitted over" and "Which stop returns which status"
+are what the amendment added, and the second says what was wrong with the
+sentence it replaces rather than replacing it quietly. Nothing else this record
+decided has moved.
+
 ## Why this is decided before the first solver exists
 
 A long simulation that hits a problem has three honest options and one dishonest
@@ -127,6 +136,81 @@ classes. It is the third verdict in the record for issue #12, and it lives there
 rather than here, because it is a statement about evidence rather than about a
 run.
 
+## A parameter used outside the range it was fitted over
+
+The record for issue #11 requires every parameter entry to carry the conditions
+its number is good for, requires a use outside them to appear in the manifest and
+in the human summary, and hands the class to this record by name:
+
+    grep -n "is issue #14's decision" docs/decisions/0011-parameter-provenance.md
+    101:refuses, is issue #14's decision and this record does not take it. What this
+
+This record said nothing about it. That left the case placed nowhere except in the
+third item of issue #28's Done-when, which is not where a reader looking for a
+failure class goes.
+
+It is a recorded substitution.
+
+The rule above, asked in its own order, is what decides it. The first question is
+whether the run could continue and produce a number a reader would mistake for
+one computed the way they asked. Taken alone the answer is yes and the case is a
+refusal, and the record for issue #11 gives the shape of it:
+
+    grep -n 'produces a plausible number that is wrong' docs/decisions/0011-parameter-provenance.md
+    87:700, produces a plausible number that is wrong for a reason nothing in the
+
+A prefactor fitted between 900 and 1100 degrees Celsius, used at 700. That same
+record then closes the half of it about the output, because it requires the
+excursion to be recorded where the user reads it, and with the disclosure in place
+the mistake the refusal class exists against is not the one on offer.
+
+The second question is answered yes. Continuing requires using a coefficient
+beyond the conditions it was established over, which the input did not supply and
+could not, and a different choice, meaning another set, a lower model rung, or
+stopping, gives a different answer.
+
+So the disclosure is load bearing rather than a courtesy beside the placement. A
+run that performs the excursion without recording it has not committed a smaller
+fault than a wrong class. It has removed the reason the case is admitted at all,
+and what it breaks is the substitution rule in this record.
+
+What is recorded is the quantity, the entry it came from, the range that entry
+states, the value of the condition at which it was used, and how far outside the
+range that is. Recording only that a parameter was used outside its range is not
+worth reading: a fit used two degrees past its window and one used two hundred
+past it are different facts, and a reader cannot get from the first to the second.
+
+The cost, stated rather than left to be found. A user who does not read the
+summary gets a number that is wrong by an amount nothing here bounds, and the
+manifest entry does not fix that. What it fixes is that the number is never
+separated from the statement that a fit was extended to reach it. The placement
+moves to a refusal, by an amendment to this record, if a validation case under
+issue #36 or issue #40 is found disagreeing with its measurement because of an
+excursion that was recorded and not read. That is observable rather than a date.
+
+Two neighbouring cases, so the boundary is visible rather than assumed. An entry
+that states no domain of validity and does not say the domain is unknown never
+reaches a run at all, because the record for issue #11 refuses it where a
+parameter set is read:
+
+    grep -n 'an entry with no domain of validity' docs/decisions/0011-parameter-provenance.md
+    182:kind are not, and an entry with no domain of validity and no statement that the
+
+And an entry whose domain is recorded as unknown produces no excursion to compute,
+so the class above cannot fire for it. The only disclosure such an entry carries
+is the one the record for issue #11 already requires, which is that the domain is
+unknown. That is a residual of admitting the kind rather than a gap this record
+can close, and nothing anywhere reads unknown as unbounded.
+
+The neighbouring case that is a refusal. A property absent for a material whose
+parameter set otherwise exists is a refusal, with the message naming the material
+and the property, which is what the fourth item of issue #28's Done-when asks for.
+It is the case already placed further up this record one step finer: a material
+for which no parameter set exists is a refusal rather than a run with a
+neighbouring material's coefficients, and the reason does not change when the gap
+is one property instead of a whole set. There is nothing to substitute from, so
+there is nothing a disclosure could carry.
+
 ## Not a number and infinity
 
 They are refusals, not values to be propagated.
@@ -182,11 +266,11 @@ The list is short and the reasons for each division are the responses they
 produce, not tidiness.
 
 A refusal and an unreadable input are separated because a sweep script does
-different things with them. A refusal is a case that needs a person to look at
-the physics or the recipe. An input that could not be read at all, meaning a
-missing file, a malformed recipe, a parameter set that does not parse, is
-ordinarily a defect in the script that generated it, and the script's own author
-is the one who fixes it.
+different things with them. A refusal is a case that needs a person to look at the
+physics or the recipe. An input that could not be read is ordinarily a defect in
+whatever produced it, and that thing's author is the one who fixes it. Which stop
+falls on which side is the section below, because the sentence that used to stand
+here answered it with one word and got it wrong.
 
 The filesystem gets its own status because it is neither of those. A directory
 that cannot be written or a file that may not be read says nothing about the case
@@ -205,6 +289,77 @@ maps an unhandled fault onto a clean status of its own has hidden a defect behin
 a number that looks considered, and the sweep script cannot tell it from a real
 refusal. A crash exits however the runtime exits, it looks like a crash, and it
 gets reported as one.
+
+## Which stop returns which status
+
+The sentence in the section above used to say that an input which could not be
+read means a missing file, a malformed recipe, or a parameter set that does not
+parse. The middle term was wrong, and this is what was wrong with it rather than a
+tidier rewrite of it. A malformed recipe is not one case. A document that is not
+the format at all, a document that is the format and fails the schema, and a
+document that passes the schema and fails a check reading more than itself are
+three stops with three different people fixing them, and one word gave them one
+status:
+
+    git show 6b59c79a571beb6120146691da4d417745217aa5:docs/decisions/0014-error-and-failure-policy.md \
+      | grep -n 'a malformed recipe'
+    187:missing file, a malformed recipe, a parameter set that does not parse, is
+
+The record for issue #9 names two validating stages and calls the failures of both
+refusals. Only the second of the two is the class that exits 1 here:
+
+    grep -n 'Issue #14 requires a refusal to' docs/decisions/0009-the-recipe-format.md
+    110:suite those implementations are tested against. Issue #14 requires a refusal to
+
+    grep -n 'refusals under issue #14' docs/decisions/0009-the-recipe-format.md
+    131:refusals under issue #14 and they run after the schema passes and before the
+
+Which status each stop returns.
+
+A file that is missing, that cannot be read, or that is not the format at all
+returns 2. Nothing about the case was established, and the fault is ordinarily in
+whatever wrote the file.
+
+A document that parses and fails the schema returns 2. Its message names the
+offending field, the instance location, the schema location and the constraint
+that failed, which is what the record for issue #9 requires of it, and naming the
+field is a property of the message rather than of the status. Who fixes it is the
+author of the document or of the script that wrote it, which is the test the
+section above gives for this division.
+
+A document declaring a schema version this build will not read returns 2. Nothing
+about the case was evaluated and what is wrong is the pairing of the document with
+the build, and the record for issue #9 already fixes that such a document is
+stopped by name with the version it needs:
+
+    grep -n 'A tool reading a major it does not know' docs/decisions/0009-the-recipe-format.md
+    267:A tool reading a major it does not know refuses it by name. It does not attempt
+
+A document that passes the schema and fails a check reading more than itself
+returns 1. Whether a named material exists in the parameter set in force, whether
+an etch names a mask that a masking step created, whether a step's parameters are
+admissible together. Each of those needs a person to look at the physics or the
+recipe, which is this record's own test for status 1, and the record for issue #9
+places them here already:
+
+    grep -n 'Whether a named material exists in the parameter set' docs/decisions/0009-the-recipe-format.md
+    128:Whether a named material exists in the parameter set, whether an etch names a
+
+A parameter set that does not parse returns 2, and that term of the original
+sentence was right. A parameter set that parses and lacks a coefficient a recipe
+uses returns 1, which is the material case placed further up this record one step
+finer.
+
+The word, since the two records use it differently and neither is wrong. In this
+record a refusal is the class that stops the run and exits 1. In the record for
+issue #9 refuse is the ordinary verb for a stage that will not proceed, and that
+set is the larger one. Anything asserting a status therefore derives it from the
+list above and not from the verb, which is what issue #58 needs before a fuzz
+target exists: almost every input a fuzzer produces is a malformed document, so a
+target asserting the refusal status would assert 1 against a reader this record
+says returns 2. The other half of that trap is the rule in the section above, that
+zero is never returned by a run which produced no result set, and it is the half a
+target asserting only the absence of a crash walks straight past.
 
 ## What a refusal leaves behind
 
@@ -250,6 +405,13 @@ into a warning, nothing checks that a refusal message names what would fix it,
 and nothing checks that the statuses above are the ones actually returned. The
 first of those is the item issue #14 holds open. The rest have no issue of their
 own today, and saying so is what this section is for.
+
+The two placements the amendment added are in the same position. Nothing reads a
+parameter's domain of validity, which the record for issue #11 says of its own two
+checks as well, so a run may extend a fit and record nothing and stay green. And
+nothing compares the stop a run made against the status list above, so a reader
+who wants to know which one a bad recipe returns has this record and no verdict
+from a machine.
 
 ## The means
 
