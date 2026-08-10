@@ -13,6 +13,14 @@ it narrows one of them. The section on records in another tree carries it, and
 the counts under "The measurement" are the ones the earlier commit produced and
 are left as they were.
 
+Every command below names the commit its output came from, rather than reading
+the checkout the reader happens to be on. Freezing a count and leaving the
+command that produced it free to move gives a paste that stops reproducing at the
+next merge, which is what happened to `docs/issue-references.md` and is written
+up there. Naming the commit costs a long line and makes each paste checkable for
+as long as the commit exists. A reader wanting today's figure substitutes
+`origin/main`, and gets a different number, which is the point.
+
 ## Why the convention comes before the check
 
 Issue #61 asks for a gate leg that refuses documentation naming a path that does
@@ -44,18 +52,30 @@ Everything else is prose and is read.
 
 The split is not close on this tree:
 
+    git ls-tree -r --name-only 5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3 \
+      | grep '\.md$' \
+      | while read -r f; do
+          git show "5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3:$f"; echo '@@@'
+        done \
+      | awk '
+        /^@@@$/{fenced=0; next}
+        { if ($0 ~ /^[ \t]*(```|~~~)/){fenced=1-fenced; next}
+          if (fenced || $0 ~ /^(    |\t)/) blk++; else pro++ }
+        END{print "lines in skipped regions: " blk; print "lines read as prose: " pro}'
     lines in skipped regions: 147
     lines read as prose: 3878
 
-which comes from walking every tracked markdown file at the commit named above,
-of which there were sixteen:
+which walks every tracked markdown file at the commit named above, of which there
+were sixteen:
 
-    git ls-files -- '*.md' | wc -l
+    git ls-tree -r --name-only 5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3 \
+      | grep -c '\.md$'
     16
 
-The command returns one more than that once this file lands, which is why the
-commit it was run at is written next to the number rather than left to be
-inferred.
+The count moves with every markdown file that lands afterwards, which is why the
+commit it was run at is named inside the command rather than beside it. The
+figure is sixteen for that commit permanently and is not the number of files in
+the tree today.
 
 ## The rules
 
@@ -140,21 +160,26 @@ and one glob standing where a filename would be, inside a quoted command:
 
     docs/decisions/0009-the-recipe-format.md:288
 
-The approximation that produced the candidate list reads each file, drops fenced
-and indented regions, and keeps link destinations and code spans:
+The approximation that produced the candidate list reads each file out of the
+commit, drops fenced and indented regions, and keeps link destinations and code
+spans:
 
-    awk '
-      BEGIN{fenced=0} FNR==1{fenced=0}
+    git ls-tree -r --name-only 5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3 \
+      | grep '\.md$' \
+      | while read -r f; do
+          git show "5e3ce8dc542fae2b3a7c43be0995a9c81ac1dca3:$f" | awk -v F="$f" '
+      BEGIN{fenced=0}
       { if ($0 ~ /^[ \t]*(```|~~~)/){fenced=1-fenced; next}
         if (fenced || $0 ~ /^(    |\t)/) next
         rest=$0
         while (match(rest, /\]\([^)]+\)/)) {
-          print FILENAME"\t"FNR"\tLINK\t"substr(rest,RSTART+2,RLENGTH-3)
+          print F"\t"FNR"\tLINK\t"substr(rest,RSTART+2,RLENGTH-3)
           rest=substr(rest,RSTART+RLENGTH) }
         rest=$0
         while (match(rest, /`[^`]+`/)) {
-          print FILENAME"\t"FNR"\tSPAN\t"substr(rest,RSTART+1,RLENGTH-2)
-          rest=substr(rest,RSTART+RLENGTH) } }' $(git ls-files -- '*.md')
+          print F"\t"FNR"\tSPAN\t"substr(rest,RSTART+1,RLENGTH-2)
+          rest=substr(rest,RSTART+RLENGTH) } }'
+        done
 
 with the candidate rules applied to its output:
 
@@ -188,7 +213,8 @@ scheme this one uses. Ten numbers exist in both trees, carrying different
 subjects in each:
 
     comm -12 \
-      <(git ls-files docs/decisions/ | sed 's#.*/##' | cut -c1-4 | sort) \
+      <(git ls-tree -r --name-only 4b06a776b6ad710c75824b9cd259e03d4e4f7d95 \
+          -- docs/decisions | sed 's#.*/##' | cut -c1-4 | sort) \
       <(gh api repos/iderex/bremsweg/contents/docs/decisions --jq '.[].name' \
         | cut -c1-4 | sort)
     0003
@@ -202,16 +228,25 @@ subjects in each:
     0012
     0013
 
+Only the left side of that is pinned. The other board's directory is read live,
+so the numbers it holds can change without anything here changing, and a reader
+running it may get a longer list than the ten below.
+
 Two of those ten are named in prose in this tree, by bare filename, and they are
 the other tree's:
 
-    git grep -n '0006-determinism-and-the-random-number-contract.md\|0010-how-uncertainty-travels-to-a-reported-number.md' -- '*.md'
-    docs/decisions/0041-the-implantation-interface.md:171:is `0010-how-uncertainty-travels-to-a-reported-number.md` in the same directory
-    docs/decisions/0041-the-implantation-interface.md:185:record is `0006-determinism-and-the-random-number-contract.md`.
+    git grep -n '0006-determinism-and-the-random-number-contract.md\|0010-how-uncertainty-travels-to-a-reported-number.md' \
+      4b06a776b6ad710c75824b9cd259e03d4e4f7d95 -- '*.md'
+    4b06a776b6ad710c75824b9cd259e03d4e4f7d95:docs/decisions/0041-the-implantation-interface.md:171:is `0010-how-uncertainty-travels-to-a-reported-number.md` in the same directory
+    4b06a776b6ad710c75824b9cd259e03d4e4f7d95:docs/decisions/0041-the-implantation-interface.md:185:record is `0006-determinism-and-the-random-number-contract.md`.
+
+Both lines carry the tree's name today, since the amendment below is what put it
+there, and the paste above is the state the amendment was made against.
 
 This tree holds a 0006 and a 0010 of its own, about different things:
 
-    git ls-files docs/decisions/ | grep -E '/(0006|0010)-'
+    git ls-tree -r --name-only 4b06a776b6ad710c75824b9cd259e03d4e4f7d95 \
+      -- docs/decisions | grep -E '/(0006|0010)-'
     docs/decisions/0006-discretisation-and-moving-boundaries.md
     docs/decisions/0010-result-document-and-run-manifest.md
 
@@ -224,8 +259,23 @@ because the reader arrives somewhere plausible instead of nowhere.
 
 One more shape came out of the same run, and it is why a bare filename cannot be
 resolved by its shape at all. Five spans in prose have no separator and a dot in
-their last segment, and one of them is not a file:
+their last segment, and one of them is not a file. It comes from the span half of
+the approximation above, run at the amendment's commit, with the candidate rule
+inverted to keep what has no separator:
 
+    git ls-tree -r --name-only 4b06a776b6ad710c75824b9cd259e03d4e4f7d95 \
+      | grep '\.md$' \
+      | while read -r f; do
+          git show "4b06a776b6ad710c75824b9cd259e03d4e4f7d95:$f" | awk -v F="$f" '
+      BEGIN{fenced=0}
+      { if ($0 ~ /^[ \t]*(```|~~~)/){fenced=1-fenced; next}
+        if (fenced || $0 ~ /^(    |\t)/) next
+        rest=$0
+        while (match(rest, /`[^`]+`/)) {
+          print F"\t"FNR"\t"substr(rest,RSTART+1,RLENGTH-2)
+          rest=substr(rest,RSTART+RLENGTH) } }'
+        done \
+      | awk -F'\t' '$3 !~ /\// && $3 !~ /[ \t]/ && $3 ~ /\.[^.]+$/'
     docs/decisions/0041-the-implantation-interface.md	171	0010-how-uncertainty-travels-to-a-reported-number.md
     docs/decisions/0041-the-implantation-interface.md	185	0006-determinism-and-the-random-number-contract.md
     docs/gate-parity.md	65	dotnet.yml
@@ -233,9 +283,9 @@ their last segment, and one of them is not a file:
     docs/gate-parity.md	126	.NET
     docs/gate-parity.md	186	dotnet.yml
 
-Six lines and five distinct spans, at the commit named at the top of this
-section. Once this file lands the command returns a seventh line and the same
-five spans, because the paragraph above quotes one of them.
+Six lines and five distinct spans, at the commit this section names. The list
+grows with every markdown file that names one afterwards, this file's own quoting
+of them included, which is why the command carries the commit.
 
 `.NET` is a platform name and will never be a path. The other four are files in
 two different trees, and nothing in the shape of any of them says which tree, or
@@ -248,13 +298,17 @@ lands on the wrong document. It is not enforceable and it is not claimed to be.
 The two references above are brought into conformance in the same change that
 adds the rule, because a rule the tree breaks on the day it lands is a rule
 nobody will follow. The change to each is the tree's name and nothing else, and
-no claim in that record moves. What reads them back once this is on `main` is
+no claim in that record moves. This section was written before that change
+landed, so it named the command that would read the two back and pasted nothing
+beside it. It has landed, and the output is
 
-    git grep -n 'iderex/bremsweg`' -- docs/decisions/0041-the-implantation-interface.md
+    git grep -n 'iderex/bremsweg`' be4364c66ef20f3d10e8cc7c552bd5a0bbbb5d81 \
+      -- docs/decisions/0041-the-implantation-interface.md
+    be4364c66ef20f3d10e8cc7c552bd5a0bbbb5d81:docs/decisions/0041-the-implantation-interface.md:171:is `0010-how-uncertainty-travels-to-a-reported-number.md`, in `iderex/bremsweg`,
+    be4364c66ef20f3d10e8cc7c552bd5a0bbbb5d81:docs/decisions/0041-the-implantation-interface.md:186:`iderex/bremsweg`.
 
-with no output pasted beside it, because at the commit this section is written
-against there is none. The count of bare filename spans does not move either,
-since naming the tree beside a filename leaves the filename bare.
+which is the merge that carried it. The count of bare filename spans does not
+move either, since naming the tree beside a filename leaves the filename bare.
 
 ## What this does not do, stated rather than implied
 
@@ -291,8 +345,10 @@ itself and this convention does not widen the claim.
 Nothing. No check reads this document, no gate leg exists to hang one off, and
 the tree carries no build for one to run in:
 
-    git ls-files -- '*.c' '*.h' '*.cpp' '*.hpp' '*.rs' 'CMakeLists.txt' | wc -l
+    git ls-tree -r --name-only c791c6f16b975c3046b3634982ac98e35fd9e95a \
+      | grep -cE '\.(c|h|cpp|hpp|rs)$|CMakeLists.txt' ; echo "exit=$?"
     0
+    exit=1
 
 Until that changes, every rule here is followed by a person or not at all, and a
 document naming a path that does not exist lands green. The convention is
