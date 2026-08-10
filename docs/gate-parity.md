@@ -214,8 +214,19 @@ on two runs.
 
 Conservation. A field transfer that loses dopant produces a smooth, monotone,
 entirely plausible profile, and every check that looks at the shape of a curve
-passes. The record for #6 fixes the tolerance as a number a check compares
-against, and #47 with #48 is where it is refused.
+passes. The tolerance is fixed as a number a check compares against in the record
+for issue #6, and the Done-when of issue #48 is where the refusal is asked for:
+
+    gh issue list --repo iderex/schichtwerk --state open --limit 300 \
+      --json number,title --jq '.[] | select(.number == 48) | "\(.number) \(.title)"'
+    48 The two dimensional mesh, and field transfer that survives remeshing
+
+    gh issue view 48 --repo iderex/schichtwerk --json body --jq .body \
+      | grep -n 'conservation tolerance'
+    17:- The conservation tolerance from #6 is enforced as a refusal per #14, not as a warning.
+
+A second number stood beside that one and the sentence was untrue of the issue it
+named. Why one number is named here and not two is below, after this list.
 
 Provenance. Every coefficient that is not derived by the code carries where it
 came from, in the same file, and no quantity has two homes. #11 holds it and
@@ -236,6 +247,74 @@ are named constants with a reason rather than literals in the suite. #21.
 
 Reproducible offline build. #25. The target board pins and reviews; this one also
 has to be rebuildable years later by somebody checking a published number.
+
+## Where this mapping and the record for issue #6 do not agree
+
+The conservation entry named two issues and one of them refuses nothing about
+conservation. The finding is issue #85, along with the reading that the tree does
+not settle which number was meant:
+
+    gh issue list --repo iderex/schichtwerk --state open --limit 300 \
+      --json number,title --jq '.[] | select(.number == 85) | "\(.number) \(.title)"'
+    85 The parity mapping names an issue that refuses nothing about conservation
+
+The entry above now claims only what it can show, and the second number is not
+guessed at. This section is why.
+
+The record the entry cites names its own pair:
+
+    git grep -n 'Issue #32 and issue #48 implement this' \
+      -- docs/decisions/0006-discretisation-and-moving-boundaries.md
+    docs/decisions/0006-discretisation-and-moving-boundaries.md:208:Issue #32 and issue #48 implement this, and both of their Done-when clauses ask
+
+Read against that record, the second number here is issue #32. Its Done-when asks
+for a refusal, and the refusal it asks for is non-convergence rather than a
+conservation figure over a tolerance:
+
+    gh issue view 32 --repo iderex/schichtwerk --json body --jq .body \
+      | sed -n '/## Done when/,$p' | grep -n 'is a refusal'
+    6:- Every exit from the Newton loop reports a reason, and non-convergence at the smallest step is a refusal.
+
+Conservation is not named anywhere in that issue, in its Done-when or outside it:
+
+    gh issue view 32 --repo iderex/schichtwerk --json body --jq .body | grep -ci conserv
+    0
+
+So writing it in carries across a claim untrue of the issue it names, which is
+the defect being repaired, one number over.
+
+The other candidate is issue #29, where a structure whose accounting does not
+close is refused, in one dimension and against this same tolerance:
+
+    gh issue list --repo iderex/schichtwerk --state open --limit 300 \
+      --json number,title --jq '.[] | select(.number == 29) | "\(.number) \(.title)"'
+    29 Fields on a structure, and the invariants a check refuses
+
+    gh issue view 29 --repo iderex/schichtwerk --json body --jq .body \
+      | sed -n '/## Done when/,$p' | grep -n 'accounting does not close'
+    7:- The pull request shows the check refusing a structure with a negative concentration, one with a stale value outside the geometry, and one where the accounting does not close.
+
+    gh issue view 29 --repo iderex/schichtwerk --json body --jq .body \
+      | grep -oE 'the invariant is that it stays under the tolerance from #6'
+    the invariant is that it stays under the tolerance from #6
+
+Writing that one in departs from the record the entry cites. Which of the two was
+meant is a question about what this document intended to say, and no reading of
+the tree answers it, so neither is written in and the entry names what it can
+show instead.
+
+That leaves this mapping and the record for issue #6 naming different sets, and
+the paragraphs above are this document's half of saying so. The record's half is
+a change to `docs/decisions/0006-discretisation-and-moving-boundaries.md` and
+belongs with issue #6.
+
+One more issue carries the tolerance in its own Done-when and is not a third
+candidate. Issue #38 asks for the tolerance to be met and the achieved figure
+reported, which is not a refusal:
+
+    gh issue view 38 --repo iderex/schichtwerk --json body --jq .body \
+      | sed -n '/## Done when/,$p' | grep -n 'conservation tolerance'
+    6:- The conservation tolerance from #6 is met and the achieved figure is reported in the manifest.
 
 ## Issues opened by this mapping
 
