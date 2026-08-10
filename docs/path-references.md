@@ -276,7 +276,9 @@ prose.
 
 It does not resolve a fragment inside a document, so a link to a heading that
 was renamed is not caught by this. Cross reference resolution is the third leg
-#61 asks for and it is a different subject.
+#61 asks for and it is a different subject. `docs/issue-references.md` is that
+subject, for the shape of it this tree is made of, which is a number on the
+tracker.
 
 It says nothing about whether a command or a flag shown in documentation is one
 the tool accepts. That is #61's second leg and it needs a tool, which needs #2.
