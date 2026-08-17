@@ -64,3 +64,9 @@ See [NOTICE.md](NOTICE.md) for the intended-use notice.
 To report a security problem privately, see [SECURITY.md](SECURITY.md). A model
 that disagrees with a measurement is not a security problem. It is a correctness
 problem, and it belongs on the issue tracker in the open.
+
+## License
+
+AGPL-3.0, copyright 2026 Nils Lehnen.
+
+The full text is in [LICENSE](LICENSE).
