@@ -12,11 +12,11 @@ content below depends on the name.
 
 ## Why this is a decision rather than an implementation detail
 
-Naming five things, implantation, diffusion, oxidation, deposition and etch
-topography, describes a field. It does not say where the field ends, and a
-project without that line spends its second year arguing one issue at a time
-about whether lithography, stress, device simulation, layout extraction and
-equipment modelling are in.
+This project names five things: implantation, diffusion, oxidation, deposition
+and etch topography. Those five describe a field, and they do not say where the
+field ends. A project without that line spends its second year arguing one issue
+at a time about whether lithography, stress, device simulation, layout
+extraction and equipment modelling are in.
 
 The argument is expensive in a specific way rather than in general. The boundary
 decides the shape of the data structures. A project that will one day compute
